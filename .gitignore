@@ -1,0 +1,7 @@
+.lazy-claude-html-slide-builder/
+.env
+.openai.env
+node_modules/
+dist/
+*.log
+.playwright-cli/

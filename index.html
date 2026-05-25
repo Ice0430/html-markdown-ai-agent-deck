@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HTML is the new Markdown? AI Agent 輸出格式之爭</title>
+  <meta name="description" content="整理 2026 年 HTML 取代 Markdown 作為 AI agent 輸出格式的事件、主張、案例與反方觀點。" />
+  <meta property="og:title" content="HTML is the new Markdown? AI Agent 輸出格式之爭" />
+  <meta property="og:description" content="Thariq Shihipar、Claude Code、Simon Willison 與社群討論的簡報整理。" />
+  <meta property="og:type" content="website" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='10' fill='%23101318'/%3E%3Cpath d='M14 18h36v8H14zM14 30h22v6H14zM14 42h30v6H14z' fill='%234fc3f7'/%3E%3C/svg%3E" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reset.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/night.css" />
+  <style>
+    :root {
+      --bg: #101318;
+      --panel: rgba(255, 255, 255, 0.075);
+      --panel-strong: rgba(255, 255, 255, 0.12);
+      --line: rgba(255, 255, 255, 0.18);
+      --text: #eef2f6;
+      --muted: #b8c0ca;
+      --dim: #8b96a3;
+      --accent: #e8643a;
+      --accent2: #4fc3f7;
+      --success: #81c784;
+      --warn: #ffb74d;
+      --danger: #ef767a;
+    }
+
+    body {
+      background:
+        radial-gradient(circle at 18% 18%, rgba(79, 195, 247, 0.12), transparent 28%),
+        linear-gradient(135deg, #0f1217 0%, #171c22 48%, #101318 100%);
+    }
+
+    .reveal {
+      color: var(--text);
+      font-family: "Segoe UI", "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+      letter-spacing: 0;
+    }
+
+    .reveal h1,
+    .reveal h2,
+    .reveal h3 {
+      font-family: "Segoe UI", "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+      font-weight: 750;
+      letter-spacing: 0;
+      text-transform: none;
+    }
+
+    .reveal h1 { font-size: 2.16em; line-height: 1.08; }
+    .reveal h2 { font-size: 1.34em; color: var(--accent2); line-height: 1.18; margin-bottom: 0.42em; }
+    .reveal h3 { font-size: 0.82em; color: var(--text); margin: 0 0 0.32em; }
+    .reveal p, .reveal li { font-size: 0.48em; line-height: 1.58; }
+    .reveal small { color: var(--dim); }
+    .reveal a { color: var(--accent2); text-decoration: none; }
+    .reveal .progress { color: var(--accent); }
+    .reveal .slide-number { color: var(--muted); background: rgba(0, 0, 0, 0.34); }
+
+    section {
+      text-align: left;
+    }
+
+    .center {
+      text-align: center;
+    }
+
+    .tag {
+      display: inline-block;
+      padding: 0.38em 0.75em;
+      border: 1px solid rgba(232, 100, 58, 0.5);
+      border-radius: 999px;
+      background: rgba(232, 100, 58, 0.14);
+      color: #ffd8cc;
+      font-size: 0.42em;
+      font-weight: 700;
+      margin-bottom: 1.1em;
+    }
+
+    .subtitle {
+      color: var(--muted);
+      font-size: 0.62em !important;
+      max-width: 880px;
+      margin: 0.7em auto 0;
+    }
+
+    .source-note {
+      margin-top: 1.2em;
+      color: var(--dim);
+      font-size: 0.34em !important;
+    }
+
+    .hero-wrap {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 40px;
+      align-items: center;
+    }
+
+    .browser-art {
+      height: 360px;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      background: #151a20;
+      box-shadow: 0 26px 70px rgba(0, 0, 0, 0.38);
+      overflow: hidden;
+    }
+
+    .browser-top {
+      height: 34px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0 14px;
+      background: rgba(255, 255, 255, 0.08);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: var(--accent);
+    }
+
+    .dot:nth-child(2) { background: var(--warn); }
+    .dot:nth-child(3) { background: var(--success); }
+
+    .browser-body {
+      padding: 18px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .mini-nav {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+    }
+
+    .mini-nav div,
+    .mini-card,
+    .mini-chart {
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .mini-nav div {
+      height: 24px;
+    }
+
+    .mini-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .mini-card {
+      min-height: 88px;
+      padding: 10px;
+    }
+
+    .mini-line {
+      height: 8px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.16);
+      margin: 8px 0;
+    }
+
+    .mini-line.short { width: 58%; }
+    .mini-line.blue { background: rgba(79, 195, 247, 0.42); }
+    .mini-line.orange { background: rgba(232, 100, 58, 0.5); }
+
+    .mini-chart {
+      height: 124px;
+      display: flex;
+      align-items: end;
+      gap: 8px;
+      padding: 12px;
+    }
+
+    .bar {
+      flex: 1;
+      border-radius: 5px 5px 0 0;
+      background: linear-gradient(180deg, var(--accent2), rgba(79, 195, 247, 0.25));
+    }
+
+    .stat-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-top: 0.8em;
+    }
+
+    .stat-card {
+      min-height: 140px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 20px 16px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .num {
+      font-size: 1.35em;
+      font-weight: 850;
+      color: var(--accent);
+      line-height: 1;
+    }
+
+    .label {
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 0.35em;
+      line-height: 1.5;
+    }
+
+    .timeline {
+      position: relative;
+      padding-left: 34px;
+      margin-top: 0.8em;
+    }
+
+    .timeline::before {
+      content: "";
+      position: absolute;
+      left: 11px;
+      top: 5px;
+      bottom: 5px;
+      width: 2px;
+      background: linear-gradient(180deg, var(--accent2), var(--accent));
+      opacity: 0.78;
+    }
+
+    .timeline-item {
+      position: relative;
+      margin-bottom: 14px;
+      padding: 13px 16px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+    }
+
+    .timeline-item::before {
+      content: "";
+      position: absolute;
+      left: -29px;
+      top: 19px;
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 0 4px rgba(232, 100, 58, 0.15);
+    }
+
+    .ti-date {
+      color: var(--accent);
+      font-size: 0.42em;
+      font-weight: 800;
+      margin-bottom: 3px;
+    }
+
+    .ti-text {
+      color: var(--muted);
+      font-size: 0.42em;
+      line-height: 1.5;
+    }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+      margin-top: 0.65em;
+    }
+
+    .card-grid.three {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .info-card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-top: 4px solid var(--accent2);
+      border-radius: 8px;
+      padding: 18px;
+      min-height: 150px;
+    }
+
+    .info-card.orange { border-top-color: var(--accent); }
+    .info-card.green { border-top-color: var(--success); }
+    .info-card.warn { border-top-color: var(--warn); }
+    .info-card.danger { border-top-color: var(--danger); }
+
+    .icon {
+      width: 42px;
+      height: 42px;
+      margin-bottom: 12px;
+      color: var(--accent2);
+    }
+
+    .info-card p {
+      color: var(--muted);
+      margin: 0;
+      font-size: 0.39em;
+    }
+
+    .compare {
+      display: grid;
+      grid-template-columns: 1fr 80px 1fr;
+      gap: 0;
+      align-items: stretch;
+      margin-top: 0.7em;
+    }
+
+    .compare-col {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 20px;
+    }
+
+    .compare-col h3 {
+      font-size: 0.62em;
+    }
+
+    .compare-col ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .compare-col li {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 9px 0;
+      color: var(--muted);
+      font-size: 0.39em;
+    }
+
+    .compare-col li:last-child {
+      border-bottom: 0;
+    }
+
+    .vs {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--dim);
+      font-weight: 900;
+      font-size: 0.8em;
+    }
+
+    .artifact-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 0.6em;
+    }
+
+    .artifact {
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.055);
+      padding: 12px 10px;
+      min-height: 82px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .artifact b {
+      color: var(--text);
+      font-size: 0.39em;
+      margin-bottom: 5px;
+    }
+
+    .artifact span {
+      color: var(--dim);
+      font-size: 0.3em;
+      line-height: 1.4;
+    }
+
+    .callout {
+      margin-top: 0.75em;
+      border-left: 4px solid var(--accent);
+      border-radius: 8px;
+      background: rgba(232, 100, 58, 0.11);
+      padding: 17px 20px;
+      color: var(--text);
+    }
+
+    .callout p {
+      margin: 0;
+      font-size: 0.46em;
+    }
+
+    .matrix {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 0.7em;
+    }
+
+    .matrix .cell {
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      background: var(--panel);
+      padding: 18px;
+      min-height: 170px;
+    }
+
+    .cell h3 {
+      color: var(--accent2);
+      font-size: 0.64em;
+    }
+
+    .cell ul {
+      margin: 0.5em 0 0;
+      padding-left: 1.1em;
+    }
+
+    .cell li {
+      color: var(--muted);
+      font-size: 0.38em;
+    }
+
+    .source-list {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 0.65em;
+    }
+
+    .source-list a {
+      display: block;
+      border: 1px solid var(--line);
+      background: var(--panel);
+      border-radius: 8px;
+      padding: 13px 15px;
+      color: var(--text);
+      font-size: 0.36em;
+      line-height: 1.42;
+    }
+
+    .source-list span {
+      display: block;
+      color: var(--dim);
+      margin-top: 4px;
+      font-size: 0.88em;
+    }
+
+    .slide-footer {
+      position: absolute;
+      left: 0;
+      bottom: -14px;
+      color: var(--dim);
+      font-size: 0.28em;
+    }
+
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 0.7em;
+    }
+
+    .pill {
+      border-radius: 999px;
+      border: 1px solid rgba(79, 195, 247, 0.35);
+      background: rgba(79, 195, 247, 0.1);
+      padding: 7px 11px;
+      color: #d8f3ff;
+      font-size: 0.33em;
+      font-weight: 700;
+    }
+
+    .one-liner {
+      font-size: 0.85em !important;
+      color: var(--text);
+      line-height: 1.45;
+      margin-top: 0.7em;
+    }
+
+    @media (max-width: 900px) {
+      .hero-wrap,
+      .card-grid,
+      .card-grid.three,
+      .matrix,
+      .source-list,
+      .stat-row {
+        grid-template-columns: 1fr;
+      }
+
+      .compare {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+
+      .vs {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+      <section>
+        <div class="hero-wrap">
+          <div>
+            <div class="tag">AI agent output formats / 2026</div>
+            <h1>HTML is the new Markdown?</h1>
+            <p class="subtitle">從 Claude Code 團隊工程師 Thariq Shihipar 的主張，看 AI 產物如何從「文件」變成「介面」。</p>
+            <p class="source-note">整理日期：2026-05-25。方向鍵切換投影片。</p>
+          </div>
+          <div class="browser-art" aria-label="HTML artifact illustration">
+            <div class="browser-top"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+            <div class="browser-body">
+              <div class="mini-nav"><div></div><div></div><div></div><div></div></div>
+              <div class="mini-grid">
+                <div class="mini-card">
+                  <div class="mini-line blue"></div>
+                  <div class="mini-line"></div>
+                  <div class="mini-line short"></div>
+                </div>
+                <div class="mini-card">
+                  <div class="mini-line orange"></div>
+                  <div class="mini-line"></div>
+                  <div class="mini-line short"></div>
+                </div>
+              </div>
+              <div class="mini-chart">
+                <div class="bar" style="height:42%"></div>
+                <div class="bar" style="height:70%"></div>
+                <div class="bar" style="height:54%"></div>
+                <div class="bar" style="height:88%"></div>
+                <div class="bar" style="height:62%"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2>一句話結論</h2>
+        <p class="one-liner">這不是 Markdown 被淘汰，而是 AI agent 的輸出開始分工：Markdown 適合保存與編輯，HTML 適合展示、審閱、互動與決策。</p>
+        <div class="stat-row">
+          <div class="stat-card">
+            <div class="num">2026/05/08</div>
+            <div class="label">Thariq Shihipar 文章與社群討論起點</div>
+          </div>
+          <div class="stat-card">
+            <div class="num">20</div>
+            <div class="label">公開 HTML artifact 範例</div>
+          </div>
+          <div class="stat-card">
+            <div class="num">528</div>
+            <div class="label">HN 討論串點數，附 274 則留言</div>
+          </div>
+          <div class="stat-card">
+            <div class="num">1MM</div>
+            <div class="label">Claude blog 提到 Opus 4.7 context window</div>
+          </div>
+        </div>
+        <div class="slide-footer">Sources: Claude blog, Hacker News, Thariq examples</div>
+      </section>
+
+      <section>
+        <h2>事件時間線</h2>
+        <div class="timeline">
+          <div class="timeline-item">
+            <div class="ti-date">2026-05-08</div>
+            <div class="ti-text">Thariq Shihipar 發表 HTML over Markdown 的 Claude Code 工作流主張；Simon Willison 同日轉述並開始重新評估 Markdown default。</div>
+          </div>
+          <div class="timeline-item">
+            <div class="ti-date">2026-05-09</div>
+            <div class="ti-text">Hacker News、中文科技社群開始討論：這是實用工作流，還是 token-heavy 的展示層？</div>
+          </div>
+          <div class="timeline-item">
+            <div class="ti-date">2026-05-11</div>
+            <div class="ti-text">Andrej Karpathy 支持「要求 LLM structure response as HTML」的做法，把它放進 AI 輸出媒介演進脈絡。</div>
+          </div>
+          <div class="timeline-item">
+            <div class="ti-date">2026-05-18</div>
+            <div class="ti-text">How I AI 訪談延伸到互動式規劃、micro-app、living design system 與 compute allocator。</div>
+          </div>
+          <div class="timeline-item">
+            <div class="ti-date">2026-05-20 前後</div>
+            <div class="ti-text">Claude 官方 blog 發布文章，註明為 Thariq 的個人觀點與使用偏好。</div>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2>為什麼 Markdown 原本勝出？</h2>
+        <div class="card-grid">
+          <div class="info-card">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4z"/><path d="M8 9h8M8 13h5M8 17h7"/></svg>
+            <h3>簡單、可讀、可編輯</h3>
+            <p>標題、列表、程式碼區塊與表格，足以支撐大多數 AI 文字輸出。</p>
+          </div>
+          <div class="info-card green">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18"/><path d="M12 3v18"/><path d="m7 7 10 10"/><path d="m17 7-10 10"/></svg>
+            <h3>Token 效率高</h3>
+            <p>早期 GPT-4 8,192 token 限制下，Markdown 比 HTML 更省輸出與上下文成本。</p>
+          </div>
+          <div class="info-card orange">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+            <h3>Git 與知識庫友善</h3>
+            <p>純文字 diff、版本控制、Obsidian / GitHub / docs pipeline 都成熟。</p>
+          </div>
+          <div class="info-card warn">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+            <h3>人機都能處理</h3>
+            <p>模型容易生成，人類也能直接修，讓它成為 agent 工作流的共同語言。</p>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2>Thariq 的反轉：AI 輸出變太複雜</h2>
+        <div class="compare">
+          <div class="compare-col">
+            <h3 style="color:var(--warn)">Markdown 文字牆</h3>
+            <ul>
+              <li>長規格容易掃過不讀</li>
+              <li>多方案比較只能線性排列</li>
+              <li>圖表常退化成 ASCII art</li>
+              <li>PR review 缺少視覺層級</li>
+              <li>難做決策輸入與回傳</li>
+            </ul>
+          </div>
+          <div class="vs">VS</div>
+          <div class="compare-col">
+            <h3 style="color:var(--accent2)">HTML artifact</h3>
+            <ul>
+              <li>可用版面引導閱讀</li>
+              <li>並排、卡片、timeline、tabs</li>
+              <li>SVG、圖表、互動元件</li>
+              <li>diff annotation 與 severity color</li>
+              <li>button / slider / export 回 agent</li>
+            </ul>
+          </div>
+        </div>
+        <div class="callout">
+          <p>核心不是「HTML 比 Markdown 高級」，而是 AI 產物正在從 report 轉向 interface。</p>
+        </div>
+      </section>
+
+      <section>
+        <h2>HTML 的 5 個優勢</h2>
+        <div class="card-grid three">
+          <div class="info-card">
+            <h3>資訊密度</h3>
+            <p>CSS、SVG、表格、圖片、canvas 與結構化區塊能把多維資訊放在同一頁。</p>
+          </div>
+          <div class="info-card green">
+            <h3>視覺清晰</h3>
+            <p>使用色彩、間距、導覽與響應式版面，降低人類閱讀大型 plan 的負擔。</p>
+          </div>
+          <div class="info-card orange">
+            <h3>容易分享</h3>
+            <p>上傳後就是 URL，非技術同事不需要 Markdown viewer。</p>
+          </div>
+          <div class="info-card warn">
+            <h3>雙向互動</h3>
+            <p>slider、toggle、拖拉卡片與 copy button 可把人的決策輸出回 prompt。</p>
+          </div>
+          <div class="info-card danger">
+            <h3>設計與原型</h3>
+            <p>HTML 可直接呈現 mockup、component variants、動畫參數與設計系統 token。</p>
+          </div>
+          <div class="info-card">
+            <h3>讓人留在迴圈中</h3>
+            <p>Thariq 的真正理由是：HTML 讓他更願意審閱 agent 的選擇。</p>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2>20 個範例：不是文件，是工作面板</h2>
+        <div class="artifact-grid">
+          <div class="artifact"><b>Exploration</b><span>多方案並排比較與取捨</span></div>
+          <div class="artifact"><b>Implementation plan</b><span>timeline、data flow、mockup、risk table</span></div>
+          <div class="artifact"><b>Annotated PR</b><span>diff、margin notes、severity tags</span></div>
+          <div class="artifact"><b>Module map</b><span>盒狀圖與 hot path</span></div>
+          <div class="artifact"><b>Design system</b><span>token swatches、component sheets</span></div>
+          <div class="artifact"><b>Prototype</b><span>動畫 slider、clickable flow</span></div>
+          <div class="artifact"><b>Diagram</b><span>SVG figure sheet、flowchart</span></div>
+          <div class="artifact"><b>Deck</b><span>單檔 HTML 簡報</span></div>
+          <div class="artifact"><b>Custom editor</b><span>ticket board、feature flag、prompt tuner</span></div>
+        </div>
+        <p class="source-note">完整範例集：thariqs.github.io/html-effectiveness</p>
+      </section>
+
+      <section>
+        <h2>社群支持：格式選擇變成 UX 問題</h2>
+        <div class="matrix">
+          <div class="cell">
+            <h3>Simon Willison</h3>
+            <ul>
+              <li>過去因 token 限制長期要求 Markdown。</li>
+              <li>Thariq 的文章讓他重新考慮 output format。</li>
+              <li>HTML 可加入 SVG、互動元件、頁內導覽。</li>
+            </ul>
+          </div>
+          <div class="cell">
+            <h3>Andrej Karpathy</h3>
+            <ul>
+              <li>建議要求 LLM 將回應結構化為 HTML。</li>
+              <li>把 HTML 放在 AI 輸出從文字走向高頻寬視覺的演進中。</li>
+              <li>眼前最務實的做法：生成 HTML 並用瀏覽器開啟。</li>
+            </ul>
+          </div>
+          <div class="cell">
+            <h3>Claude / Anthropic</h3>
+            <ul>
+              <li>官方 blog 發布 Thariq 的使用方式與 FAQ。</li>
+              <li>文章註明這是個人觀點，不是標準廢棄 Markdown。</li>
+              <li>強調 Claude Code 可讀 codebase、git history、MCP context 後生成 HTML。</li>
+            </ul>
+          </div>
+          <div class="cell">
+            <h3>中文技術社群</h3>
+            <ul>
+              <li>多數解讀為「AI 生成的不是答案，而是工作面板」。</li>
+              <li>關鍵轉變：從線性閱讀轉為可瀏覽、可比對、可定位、可交互。</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2>反方觀點：HTML 不是免費午餐</h2>
+        <div class="card-grid">
+          <div class="info-card warn">
+            <h3>Token 與成本</h3>
+            <p>反方估計 HTML 可能需要 2 到 4 倍輸出 token，生成更慢，輸出 token 也更貴。</p>
+          </div>
+          <div class="info-card danger">
+            <h3>Diff 與維護</h3>
+            <p>大型 HTML 檔較難人工 diff、review、局部修改；Markdown 仍是長期紀錄的強項。</p>
+          </div>
+          <div class="info-card orange">
+            <h3>安全與信任</h3>
+            <p>HTML 可能含 JavaScript；不可信的 AI 生成檔需要 sandbox、審查或禁用腳本。</p>
+          </div>
+          <div class="info-card">
+            <h3>真正問題可能是輸出膨脹</h3>
+            <p>Reddit 討論指出：如果 100 行 Markdown 沒人讀，可能該先要求 agent 精簡。</p>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2>最佳分工：Markdown for memory, HTML for review</h2>
+        <div class="compare">
+          <div class="compare-col">
+            <h3 style="color:var(--success)">Markdown 適合</h3>
+            <ul>
+              <li>長期知識庫與 repo docs</li>
+              <li>AGENTS.md、CLAUDE.md、README</li>
+              <li>版本控制與文字 diff</li>
+              <li>人類與 agent 反覆編輯</li>
+              <li>低成本中間素材</li>
+            </ul>
+          </div>
+          <div class="vs">+</div>
+          <div class="compare-col">
+            <h3 style="color:var(--accent2)">HTML 適合</h3>
+            <ul>
+              <li>簡報、報告、教學頁</li>
+              <li>PR review 與設計審閱</li>
+              <li>多方案比較與決策介面</li>
+              <li>互動式調參與 micro-editor</li>
+              <li>非技術同事瀏覽與分享</li>
+            </ul>
+          </div>
+        </div>
+        <div class="pill-row">
+          <span class="pill">Source of truth: Markdown</span>
+          <span class="pill">Human review layer: HTML</span>
+          <span class="pill">Structured data: JSON/YAML</span>
+          <span class="pill">Publish target: browser</span>
+        </div>
+      </section>
+
+      <section>
+        <h2>做簡報時可以採用的敘事</h2>
+        <div class="timeline">
+          <div class="timeline-item">
+            <div class="ti-date">1. 舊世界</div>
+            <div class="ti-text">AI 主要產生文字答案，Markdown 夠輕、夠快、夠可讀。</div>
+          </div>
+          <div class="timeline-item">
+            <div class="ti-date">2. 轉折</div>
+            <div class="ti-text">Coding agents 開始產生長規格、PR review、設計方案與研究報告，人類不再細讀。</div>
+          </div>
+          <div class="timeline-item">
+            <div class="ti-date">3. 新解法</div>
+            <div class="ti-text">HTML 把輸出變成可瀏覽、可互動、可分享的工作介面。</div>
+          </div>
+          <div class="timeline-item">
+            <div class="ti-date">4. 平衡</div>
+            <div class="ti-text">HTML 不取代所有 Markdown，而是接手「要給人審閱和決策」的那一層。</div>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2>關鍵來源</h2>
+        <div class="source-list">
+          <a href="https://claude.com/blog/using-claude-code-the-unreasonable-effectiveness-of-html">Claude 官方 blog<span>Thariq Shihipar 的完整使用說明與 FAQ</span></a>
+          <a href="https://thariqs.github.io/html-effectiveness/">Thariq HTML examples<span>20 個單檔 HTML artifact 展示</span></a>
+          <a href="https://simonwillison.net/2026/May/8/unreasonable-effectiveness-of-html/">Simon Willison<span>重新評估 Markdown default 的轉述與實測</span></a>
+          <a href="https://news.ycombinator.com/item?id=48071940">Hacker News<span>528 points / 274 comments 的社群討論</span></a>
+          <a href="https://dev.to/vishal_veerareddy_9cdd17d/html-is-the-new-markdown-3hf8">DEV Community<span>成本、token 與反方觀點整理</span></a>
+          <a href="https://www.chatprd.ai/how-i-ai/claude-code-anthropic-thariq-shihipar-on-replacing-markdown-with-html">ChatPRD / How I AI<span>訪談整理：micro-app 與 living design system</span></a>
+          <a href="https://www.inside.com.tw/article/41251-from-md-to-html">INSIDE 中文報導<span>中文脈絡與人機互動解讀</span></a>
+          <a href="https://www.blocktempo.com/karpathy-endorses-html-replacing-markdown-brain-visual-gpu-neural-video/">動區動趨<span>Karpathy 支持 HTML 輸出的報導</span></a>
+        </div>
+      </section>
+
+      <section class="center">
+        <div class="tag">Final takeaway</div>
+        <h1>AI 時代的文件，正在變成介面</h1>
+        <p class="subtitle">不要問「Markdown 還是 HTML 誰贏」。先問：這份輸出是要被保存、被編輯，還是要被人看懂並做決策？</p>
+      </section>
+
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+  <script>
+    Reveal.initialize({
+      hash: true,
+      transition: "slide",
+      transitionSpeed: "default",
+      backgroundTransition: "fade",
+      center: true,
+      progress: true,
+      controls: true,
+      slideNumber: "c/t",
+      width: 1280,
+      height: 720,
+      margin: 0.06
+    });
+  </script>
+</body>
+</html>
