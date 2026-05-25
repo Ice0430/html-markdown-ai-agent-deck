@@ -490,7 +490,7 @@
             <div class="tag">AI agent output formats / 2026</div>
             <h1>HTML is the new Markdown?</h1>
             <p class="sub">從 Claude Code 團隊工程師 Thariq Shihipar 的主張，看 AI 產物如何從「文件」變成「介面」。</p>
-            <p class="note">依 html-slide-builder 重新強化：互動文字雲、即時投票、VIZ 滑桿、來源頁與 GitHub Pages。</p>
+            <p class="note">依 html-slide-builder 重新強化：互動文字雲、即時投票、滑桿視覺化、來源頁與 GitHub Pages。</p>
           </div>
           <div class="artifact-window bg-panel" aria-label="HTML artifact illustration">
             <div class="window-top"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
@@ -512,7 +512,7 @@
         </div>
       </section>
 
-      <section id="slide-wordcloud">
+      <section id="slide-wordcloud" data-feature="wordcloud" data-background-image="images/roadmap.svg" data-background-opacity="0.12" data-background-size="cover">
         <h2>你最想改善 AI 輸出的哪一點？</h2>
         <p class="sub">輸入一個詞，例如「可讀性」「互動」「版本控制」「成本」。支援 Firebase Firestore；若連線失敗，會自動退回本機互動模式。</p>
         <div class="interactive-shell">
@@ -531,22 +531,22 @@
         </div>
       </section>
 
-      <section>
-        <h2>簡報大綱與功能標記</h2>
+      <section data-feature="roadmap" data-background-image="images/roadmap.svg" data-background-opacity="0.18" data-background-size="cover">
+        <h2>今日路線圖</h2>
         <table class="agenda">
-          <thead><tr><th>頁碼</th><th>主題</th><th>目的</th><th>標記</th></tr></thead>
+          <thead><tr><th>頁碼</th><th>主題</th><th>目的</th><th>呈現方式</th></tr></thead>
           <tbody>
-            <tr><td>1</td><td>封面</td><td>建立事件問題意識</td><td>[BG]</td></tr>
-            <tr><td>2</td><td>文字雲</td><td>收集觀眾對 AI 輸出的痛點</td><td>[INTERACT]</td></tr>
-            <tr><td>3-6</td><td>事件與主張</td><td>說清楚時間線、問題與優勢</td><td>[ICON]</td></tr>
-            <tr><td>7</td><td>格式滑桿</td><td>讓 Markdown 到 HTML 的差異可視化</td><td>[VIZ]</td></tr>
-            <tr><td>8</td><td>投票</td><td>確認觀眾偏好的工作流分工</td><td>[INTERACT]</td></tr>
-            <tr><td>9-13</td><td>案例、反方、結論、來源</td><td>支撐決策與引用</td><td>[ICON][BG]</td></tr>
+            <tr><td>1</td><td>封面</td><td>建立事件問題意識</td><td>主視覺背景</td></tr>
+            <tr><td>2</td><td>文字雲</td><td>收集觀眾對 AI 輸出的痛點</td><td>現場輸入</td></tr>
+            <tr><td>3-6</td><td>事件與主張</td><td>說清楚時間線、問題與優勢</td><td>圖示卡片</td></tr>
+            <tr><td>7</td><td>格式滑桿</td><td>讓 Markdown 到 HTML 的差異可視化</td><td>拖曳比較</td></tr>
+            <tr><td>8</td><td>投票</td><td>確認觀眾偏好的工作流分工</td><td>即時選擇</td></tr>
+            <tr><td>9-13</td><td>案例、反方、結論、來源</td><td>支撐決策與引用</td><td>案例矩陣與來源</td></tr>
           </tbody>
         </table>
       </section>
 
-      <section>
+      <section data-feature="summary" data-background-image="images/decision.svg" data-background-opacity="0.16" data-background-size="cover">
         <h2>一句話結論</h2>
         <p style="font-size:0.78em;line-height:1.45;color:var(--text)">這不是 Markdown 被淘汰，而是 AI agent 的輸出開始分工：Markdown 適合保存與編輯，HTML 適合展示、審閱、互動與決策。</p>
         <div class="stat-row">
@@ -557,7 +557,7 @@
         </div>
       </section>
 
-      <section>
+      <section data-feature="timeline">
         <h2>事件時間線</h2>
         <div class="timeline">
           <div class="timeline-item"><div class="ti-date">2026-05-08</div><div class="ti-text">Thariq Shihipar 發表 HTML over Markdown 的 Claude Code 工作流主張；Simon Willison 同日轉述並重新評估 Markdown default。</div></div>
@@ -568,7 +568,7 @@
         </div>
       </section>
 
-      <section>
+      <section data-feature="icon-cards">
         <h2>為什麼 Markdown 原本勝出？</h2>
         <div class="grid2">
           <div class="card"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4z"/><path d="M8 9h8M8 13h5M8 17h7"/></svg><h3>簡單可讀</h3><p>標題、列表、程式碼區塊與表格，足以支撐大多數 AI 文字輸出。</p></div>
@@ -578,7 +578,7 @@
         </div>
       </section>
 
-      <section>
+      <section data-feature="comparison">
         <h2>Thariq 的反轉：AI 輸出變太複雜</h2>
         <div class="compare">
           <div class="compare-col"><h3 style="color:var(--warn)">Markdown 文字牆</h3><ul><li>長規格容易掃過不讀</li><li>多方案比較只能線性排列</li><li>圖表常退化成 ASCII art</li><li>PR review 缺少視覺層級</li><li>難做決策輸入與回傳</li></ul></div>
@@ -635,7 +635,7 @@ Thariq Shihipar 在 2026 年 5 月大膽提出：
         <p class="smallprint center">已投票數：<b id="poll-total">0</b></p>
       </section>
 
-      <section>
+      <section data-feature="icon-cases">
         <h2>20 個範例：不是文件，是工作面板</h2>
         <div class="grid3">
           <div class="card"><h3>Exploration</h3><p>多方案並排比較與取捨。</p></div>
@@ -648,7 +648,7 @@ Thariq Shihipar 在 2026 年 5 月大膽提出：
         <p class="note">完整範例集：thariqs.github.io/html-effectiveness</p>
       </section>
 
-      <section>
+      <section data-feature="community">
         <h2>社群支持：格式選擇變成 UX 問題</h2>
         <div class="grid2">
           <div class="card"><h3>Simon Willison</h3><p>過去因 token 限制長期要求 Markdown；Thariq 的文章讓他重新考慮 output format。</p></div>
@@ -658,7 +658,7 @@ Thariq Shihipar 在 2026 年 5 月大膽提出：
         </div>
       </section>
 
-      <section>
+      <section data-feature="tradeoffs">
         <h2>反方觀點：HTML 不是免費午餐</h2>
         <div class="grid2">
           <div class="card warn"><h3>Token 與成本</h3><p>HTML 可能需要更多輸出 token，生成更慢，成本不可忽略。</p></div>
@@ -668,7 +668,7 @@ Thariq Shihipar 在 2026 年 5 月大膽提出：
         </div>
       </section>
 
-      <section>
+      <section data-feature="decision" data-background-image="images/decision.svg" data-background-opacity="0.14" data-background-size="cover">
         <h2>最佳分工：Markdown for memory, HTML for review</h2>
         <div class="compare">
           <div class="compare-col"><h3 style="color:var(--success)">Markdown 適合</h3><ul><li>長期知識庫與 repo docs</li><li>AGENTS.md、README、規格紀錄</li><li>版本控制與文字 diff</li><li>人類與 agent 反覆編輯</li><li>低成本中間素材</li></ul></div>
