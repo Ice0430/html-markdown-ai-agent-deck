@@ -320,15 +320,14 @@
     .viz-layer {
       position: absolute;
       inset: 0;
-      padding: 24px;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 18px;
-      align-items: center;
+      padding: 22px 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
     }
-    .viz-before { background: linear-gradient(135deg, #14191f, #20242b); }
+    .viz-before { background: linear-gradient(135deg, #10151d, #1d232d); }
     .viz-after {
-      background: linear-gradient(135deg, rgba(79,195,247,0.18), rgba(232,100,58,0.12)), #101822;
+      background: linear-gradient(135deg, rgba(79,195,247,0.12), rgba(232,100,58,0.1)), #101822;
       clip-path: inset(0 100% 0 0);
     }
     .viz-divider {
@@ -356,6 +355,96 @@
       font-size: 0.28em;
       line-height: 1.5;
       font-family: "Cascadia Mono", "Consolas", monospace;
+    }
+    .viz-kicker {
+      display: flex;
+      justify-content: space-between;
+      color: var(--accent2);
+      font-size: 0.26em;
+      font-weight: 850;
+      letter-spacing: 0;
+      margin-bottom: 9px;
+    }
+    .md-demo {
+      min-height: 292px;
+      border-radius: 8px;
+      border: 1px solid rgba(79,195,247,0.2);
+      background: rgba(3,8,13,0.68);
+      padding: 18px 20px;
+      overflow: hidden;
+    }
+    .md-demo pre {
+      margin: 0;
+      white-space: pre-wrap;
+      color: #d8e3ee;
+      font-size: 0.245em;
+      line-height: 1.58;
+      font-family: "Cascadia Mono", "Consolas", monospace;
+    }
+    .md-demo .md-title { color: var(--accent); font-weight: 850; }
+    .md-demo .md-link { color: var(--accent2); }
+    .html-demo {
+      min-height: 292px;
+      border-radius: 8px;
+      border: 1px solid rgba(79,195,247,0.28);
+      background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03));
+      padding: 18px 22px;
+      overflow: hidden;
+      box-shadow: inset 0 0 32px rgba(79,195,247,0.06);
+    }
+    .html-demo h3 {
+      margin: 0 0 9px;
+      color: var(--accent2);
+      font-size: 0.72em;
+      text-align: center;
+    }
+    .html-demo .quote {
+      border-left: 4px solid var(--accent2);
+      background: rgba(79,195,247,0.1);
+      color: #d7ecff;
+      font-size: 0.28em;
+      line-height: 1.5;
+      padding: 10px 14px;
+      margin: 8px auto 13px;
+      max-width: 720px;
+      text-align: center;
+      font-style: italic;
+      border-radius: 4px;
+    }
+    .html-demo-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 8px;
+    }
+    .html-demo-card {
+      border: 1px solid rgba(255,255,255,0.13);
+      border-top: 3px solid var(--accent);
+      border-radius: 7px;
+      background: rgba(255,255,255,0.07);
+      padding: 10px;
+      min-height: 94px;
+    }
+    .html-demo-card b {
+      display: block;
+      color: var(--accent);
+      font-size: 0.29em;
+      margin-bottom: 6px;
+      text-align: center;
+    }
+    .html-demo-card span {
+      display: block;
+      color: var(--muted);
+      font-size: 0.22em;
+      line-height: 1.45;
+    }
+    .viz-label-row {
+      display: flex;
+      justify-content: space-between;
+      color: var(--accent2);
+      font-size: 0.28em;
+      font-weight: 850;
+      margin-top: 8px;
     }
     .viz-range {
       width: 100%;
@@ -398,7 +487,7 @@
       <section data-background-image="images/cover.svg" data-background-opacity="0.28" data-background-size="cover">
         <div class="hero">
           <div>
-            <div class="tag">[BG] AI agent output formats / 2026</div>
+            <div class="tag">AI agent output formats / 2026</div>
             <h1>HTML is the new Markdown?</h1>
             <p class="sub">從 Claude Code 團隊工程師 Thariq Shihipar 的主張，看 AI 產物如何從「文件」變成「介面」。</p>
             <p class="note">依 html-slide-builder 重新強化：互動文字雲、即時投票、VIZ 滑桿、來源頁與 GitHub Pages。</p>
@@ -424,7 +513,7 @@
       </section>
 
       <section id="slide-wordcloud">
-        <h2>[INTERACT:wordcloud] 你最想改善 AI 輸出的哪一點？</h2>
+        <h2>你最想改善 AI 輸出的哪一點？</h2>
         <p class="sub">輸入一個詞，例如「可讀性」「互動」「版本控制」「成本」。支援 Firebase Firestore；若連線失敗，會自動退回本機互動模式。</p>
         <div class="interactive-shell">
           <div class="control-panel bg-panel">
@@ -480,7 +569,7 @@
       </section>
 
       <section>
-        <h2>[ICON] 為什麼 Markdown 原本勝出？</h2>
+        <h2>為什麼 Markdown 原本勝出？</h2>
         <div class="grid2">
           <div class="card"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4z"/><path d="M8 9h8M8 13h5M8 17h7"/></svg><h3>簡單可讀</h3><p>標題、列表、程式碼區塊與表格，足以支撐大多數 AI 文字輸出。</p></div>
           <div class="card green"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18"/><path d="M12 3v18"/><path d="m7 7 10 10"/><path d="m17 7-10 10"/></svg><h3>Token 省</h3><p>早期 GPT-4 8,192 token 限制下，Markdown 比 HTML 更省上下文成本。</p></div>
@@ -498,46 +587,49 @@
         </div>
       </section>
 
-      <section id="slide-viz">
-        <h2>[VIZ] 從文件到介面：拖曳比較</h2>
-        <p class="sub">用滑桿揭露 HTML 工作面板。左側是傳統 Markdown 線性報告，右側是可瀏覽、可互動、可決策的 artifact。</p>
+      <section id="slide-viz" data-feature="viz">
+        <h2>親眼見證：Markdown → HTML 即時轉換</h2>
+        <p class="sub">拖曳滑桿比較同一份 AI 輸出：左側是 Markdown 原稿，右側是轉成 HTML 後的審閱介面。</p>
         <div class="viz-wrap">
           <div class="viz-layer viz-before">
-            <div class="viz-box"><h3>Markdown report</h3><pre># Plan
-- Option A
-- Option B
-- Tradeoffs
-- Risks
+            <div class="viz-kicker"><span>{ Markdown 原始輸出 }</span><span>HTML 渲染結果</span></div>
+            <div class="md-demo">
+              <pre><span class="md-title">## AI 輸出格式的演進</span>
 
-Review notes:
-Long text, tables, and lists.
-Readers must mentally compare sections.</pre></div>
-            <div class="viz-box"><h3>Human effort</h3><pre>Scroll
-Scan
-Remember
-Compare
-Copy decisions back to prompt</pre></div>
+過去 LLM context window 有限，**Markdown** 因語法精簡而成為標準。
+Thariq Shihipar 在 2026 年 5 月大膽提出：
+> <span class="md-link">HTML 才是 AI Agent 的最佳輸出格式，Markdown 的時代已經過去。</span>
+
+### 三大關鍵優勢
+| 比較項目 | Markdown | HTML |
+|---------|----------|------|
+| 視覺豐富度 | 低 | 高 |
+| 互動能力 | 無 | 強 |
+| Token 效率 | 高 | 中 |
+
+問題：觀眾必須自己掃描、比對、整理重點。</pre>
+            </div>
           </div>
           <div id="viz-after" class="viz-layer viz-after">
-            <div class="viz-box"><h3>HTML workspace</h3><pre>Cards
-Tabs
-Charts
-Filters
-Buttons
-Decision export</pre></div>
-            <div class="viz-box"><h3>Human loop</h3><pre>See structure
-Interact
-Choose
-Send structured feedback
-Stay in the loop</pre></div>
+            <div class="viz-kicker"><span>{ Markdown 原始輸出 }</span><span>HTML 渲染結果</span></div>
+            <div class="html-demo">
+              <h3>AI 輸出格式的演進</h3>
+              <div class="quote">「HTML 才是 AI Agent 的最佳輸出格式，Markdown 的時代已經過去。」</div>
+              <div class="html-demo-grid">
+                <div class="html-demo-card"><b>視覺化</b><span>表格、圖表、卡片與版面層級直接呈現，不需要讀者自行重組。</span></div>
+                <div class="html-demo-card"><b>互動性</b><span>滑桿、投票、篩選、按鈕與可點選流程，讓審閱變成操作。</span></div>
+                <div class="html-demo-card"><b>分享力</b><span>單一 HTML 檔或 GitHub Pages 網址，瀏覽器開啟即可展示。</span></div>
+              </div>
+              <div class="viz-label-row"><span>Markdown：保存與編輯</span><span>HTML：展示與決策</span></div>
+            </div>
           </div>
           <div id="viz-divider" class="viz-divider"></div>
         </div>
         <input id="viz-slider" class="viz-range" type="range" min="0" max="100" value="0" aria-label="Reveal HTML workspace" />
       </section>
 
-      <section id="slide-poll">
-        <h2>[INTERACT:poll] 你會怎麼分工？</h2>
+      <section id="slide-poll" data-feature="poll">
+        <h2>你會怎麼分工？</h2>
         <p class="sub">投票結果會優先寫入 Firestore；若連線失敗，會使用本機資料。這頁適合現場簡報時確認觀眾偏好。</p>
         <div id="poll-options" class="poll-options"></div>
         <p class="smallprint center">已投票數：<b id="poll-total">0</b></p>
@@ -600,7 +692,7 @@ Stay in the loop</pre></div>
       </section>
 
       <section data-background-image="images/ending.svg" data-background-opacity="0.32" data-background-size="cover" class="center">
-        <div class="tag">[BG] Final takeaway</div>
+        <div class="tag">Final takeaway</div>
         <h1>AI 時代的文件，正在變成介面</h1>
         <p class="sub" style="margin-left:auto;margin-right:auto">不要問「Markdown 還是 HTML 誰贏」。先問：這份輸出是要被保存、被編輯，還是要被人看懂並做決策？</p>
       </section>
